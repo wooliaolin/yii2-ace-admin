@@ -27,7 +27,7 @@ $this->registerJsFile($url.'/js/chosen.jquery.min.js', $depends);
                         "defaultOrder": "desc"
                     },
                     {
-                        "title": "Api名称",
+                        "title": "接口名称",
                         "data": "summary",
                         "sName": "summary",
                         "edit": {"type": "text", "required": true, "rangelength": "[2, 255]"},
@@ -46,7 +46,7 @@ $this->registerJsFile($url.'/js/chosen.jquery.min.js', $depends);
                         }
                     },
                     {
-                        "title": "Method",
+                        "title": "请求方式",
                         "data": "method",
                         "sName": "method",
                         "value": methods,
@@ -57,7 +57,7 @@ $this->registerJsFile($url.'/js/chosen.jquery.min.js', $depends);
                         }
                     },
                     {
-                        "title": "版本",
+                        "title": "接口版本",
                         "data": "version",
                         "sName": "version",
                         "isHide": true,
@@ -67,7 +67,7 @@ $this->registerJsFile($url.'/js/chosen.jquery.min.js', $depends);
                         "bViews": false
                     },
                     {
-                        "title": "URL",
+                        "title": "请求地址",
                         "data": "url",
                         "sName": "url",
                         "isHide": true,
@@ -77,7 +77,7 @@ $this->registerJsFile($url.'/js/chosen.jquery.min.js', $depends);
                         "bViews": false
                     },             
                     {
-                        "title": "tags",
+                        "title": "所属模块",
                         "data": "tags",
                         "sName": "tags",
                         "isHide": true,
@@ -87,7 +87,7 @@ $this->registerJsFile($url.'/js/chosen.jquery.min.js', $depends);
                         "bViews": false
                     },                        
                     {
-                        "title": "description",
+                        "title": "描述信息",
                         "data": "description",
                         "sName": "description",
                         "isHide": true,
@@ -97,7 +97,7 @@ $this->registerJsFile($url.'/js/chosen.jquery.min.js', $depends);
                         "bViews": false
                     },
                     {
-                        "title": "MIME类型使用",
+                        "title": "请求格式",
                         "data": "consumes",
                         "sName": "consumes",
                         "isHide": true,
@@ -107,7 +107,7 @@ $this->registerJsFile($url.'/js/chosen.jquery.min.js', $depends);
                         "bViews": false
                     },
                     {
-                        "title": "MIME类型产生",
+                        "title": "响应格式",
                         "data": "produces",
                         "sName": "produces",
                         "isHide": true,
@@ -117,7 +117,7 @@ $this->registerJsFile($url.'/js/chosen.jquery.min.js', $depends);
                         "bViews": false
                     },
                     {
-                        "title": "配置参数",
+                        "title": "请求参数",
                         "data": "parameters",
                         "sName": "parameters",
                         "isHide": true,
@@ -127,7 +127,7 @@ $this->registerJsFile($url.'/js/chosen.jquery.min.js', $depends);
                         "bViews": false
                     },
                     {
-                        "title": "响应参数",
+                        "title": "请求响应",
                         "data": "responses",
                         "sName": "responses",
                         "isHide": true,

@@ -39,11 +39,12 @@ $this->registerJsFile('@web/assets/apiform.js');
             <div class="form-group">
                 <label class="col-sm-1 control-label no-padding-right">所属模块</label>
                 <div class="col-sm-4">
-                    <select class="form-control" required="true" name="tags">
+                    <input type="text" name="tags" required="true"  placeholder="例如：用户管理" class="form-control" />
+                    <!--<select class="form-control" required="true" name="tags">
                         <option value=""></option>
                         <option value="用户">用户</option>
                         <option value="文件">文件</option>
-                    </select>
+                    </select>-->
                 </div>
                 <label class="col-sm-1 control-label no-padding-right">是否弃用</label>
                 <div class="col-sm-4">

@@ -39,7 +39,7 @@
 
         // Build a system
         const ui = SwaggerUIBundle({
-            url: "/site/doc",
+            url: "<?=$api?>",
             dom_id: '#swagger-ui',
             deepLinking: true,
             validatorUrl : null,
