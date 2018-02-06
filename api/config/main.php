@@ -5,17 +5,17 @@ $params = array_merge(
 );
 
 return [
-    'id' => 'app-frontend',
+    'id' => 'app-api',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
-    'controllerNamespace' => 'frontend\controllers',
+    'controllerNamespace' => 'api\controllers',
     'components' => [
         // 用户配置
         'user' => [
             'identityClass'   => 'common\models\User',
             'enableAutoLogin' => true,
-            #'enableSession' => false,
-            #'loginUrl' => null,
+            'enableSession' => false,
+            'loginUrl' => null,
         ],
         'urlManager' => [
             'enablePrettyUrl' => true,
@@ -25,14 +25,19 @@ return [
                 [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => ['v1/goods'],
+                    'controller' => ['v1/users'],
+                    'extraPatterns' => [
+                        'POST login' => 'login',
+                        'POST signup' => 'signup',
+                    ]
                 ],
             ],
         ],
     ],
-    'params' => $params,
     'modules' => [
         'v1' => [
             'class' => 'api\modules\v1\Module',
         ],
     ],
+    'params' => $params,
 ];

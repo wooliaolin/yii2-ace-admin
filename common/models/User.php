@@ -1,4 +1,5 @@
 <?php
+
 namespace common\models;
 
 use Yii;
@@ -27,7 +28,7 @@ class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
-
+    public $api_token = '';
 
     /**
      * @inheritdoc
@@ -71,7 +72,13 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
+//        throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
+        // 如果token无效的话，
+        if(!static::apiTokenIsValid($token)) {
+            throw new \yii\web\UnauthorizedHttpException("token is invalid.");
+        }
+
+        return static::findOne(['access_token' => $token]);
     }
 
     /**
@@ -82,7 +89,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findByUsername($username)
     {
-        return static::findOne(['email' => $username, 'status' => self::STATUS_ACTIVE]);
+        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
     }
 
     /**
@@ -115,7 +122,7 @@ class User extends ActiveRecord implements IdentityInterface
             return false;
         }
 
-        $timestamp = (int) substr($token, strrpos($token, '_') + 1);
+        $timestamp = (int)substr($token, strrpos($token, '_') + 1);
         $expire = Yii::$app->params['user.passwordResetTokenExpire'];
         return $timestamp + $expire >= time();
     }
@@ -187,5 +194,61 @@ class User extends ActiveRecord implements IdentityInterface
     public function removePasswordResetToken()
     {
         $this->password_reset_token = null;
+    }
+
+    /**
+     * 你可以覆盖 fields() 方法来添加，删除，重命名或重定义字段
+     */
+    public function fields_001()
+    {
+        return [
+            // field name is the same as the attribute name
+            'id',
+            'name' => 'username',
+            // field name is "name", its value is defined by a PHP callback
+            'name' => function () {
+                return '尊敬的:' . $this->username;
+            },
+        ];
+    }
+
+    /**
+     * Notes: filter out some fields
+     * User: adrien
+     * Date: 2018/1/30
+     * Time: 11:58
+     * @return mixed
+     */
+    public function fields()
+    {
+        $fields = parent::fields();
+
+        // remove fields that contain sensitive information
+        unset($fields['auth_key'], $fields['password_hash'], $fields['password_reset_token']);
+
+        return $fields;
+    }
+
+    /**
+     * 生成 api_token
+     */
+    public function generateApiToken()
+    {
+        $this->api_token = Yii::$app->security->generateRandomString() . '_' . time();
+        return $this->api_token;
+    }
+
+    /**
+     * 校验api_token是否有效
+     */
+    public static function apiTokenIsValid($token)
+    {
+        if (empty($token)) {
+            return false;
+        }
+
+        $timestamp = (int)substr($token, strrpos($token, '_') + 1);
+        $expire = Yii::$app->params['user.apiTokenExpire'];
+        return $timestamp + $expire >= time();
     }
 }

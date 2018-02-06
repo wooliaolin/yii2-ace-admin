@@ -3,8 +3,8 @@
 namespace backend\controllers;
 
 use Yii;
-use common\helpers\Helper;
-use backend\models\AdminLog;
+use backend\models\Definitions;
+use common\models\Api;
 
 /**
  * Class ApiController api 执行操作控制器
@@ -12,37 +12,30 @@ use backend\models\AdminLog;
  */
 class ApiController extends Controller
 {
-
     /**
      * @var string 定义使用的model
      */
     public $modelClass = 'common\models\Api';
+    public $definitions = [];
 
+    public  function  init()
+    {
+        parent::init();
+        $this->definitions = Definitions::find()->all();
+    }
     /**
-     * 首页显示
+     * 查询用户数据
      * @return string
      */
     public function actionIndex()
     {
-
-        // 查询用户数据
         return $this->render('index', [
-            'methods' => [
-                'get'=>'get',
-                'post'=>'post',
-                'put'=>'put',
-                'delete'=>'delete',
-                'options'=>'options'
-            ],
-            'schemelist' => [
-                'http'=>'http',
-                'https'=>'https',
-                'ws'=>'ws',
-                'wss'=>'wss'
-            ],
+            'methods' => Yii::$app->params['methods'],
+            'schemelist' => Yii::$app->params['schemelist'],
+            'versions' => Yii::$app->params['versions'],
+            'definitions' => $this->definitions,
         ]);
     }
-
 
     /**
      * 查询处理
@@ -56,46 +49,36 @@ class ApiController extends Controller
         ];
     }
 
-
-    /**
-     * 查看接口文档
-     * @return string
-     */
-    public function actionDoc()
-    {
-        $this->layout = false;
-        return $this->render('doc');
-    }
-
     /**
      * Api Form
      */
     public function actionForm()
     {
-//        $this->layout = false;
+        $formdata = Api::findOne(Yii::$app->request->get('id')) ;
+        $parameters = $formdata['parameters'];
+        // var_dump(json_decode($parameters,true));die;
         return $this->render('form',[
-            'methods' => [
-            'get'=>'get',
-            'post'=>'post',
-            'put'=>'put',
-            'delete'=>'delete',
-            'options'=>'options'
-            ],
-            'schemelist' => [
-            'http'=>'http',
-            'https'=>'https',
-            'ws'=>'ws',
-            'wss'=>'wss'
-            ],
+            'methods' => Yii::$app->params['methods'],
+            'schemelist' => Yii::$app->params['schemelist'],
+            'versions' => Yii::$app->params['versions'],
+            'definitions' => $this->definitions,
+            'enctype' => Yii::$app->params['enctype'],
+            'formType' => Yii::$app->params['formType'],
+            'formPath' => Yii::$app->params['formPath'],
+            'formdata' => $formdata ? $formdata->toArray() : $formdata,
+            'parameters' => $parameters ? json_decode($parameters,true) : '',
         ]);
     }
 
-    /**
-     * Api Store
-     *
-     */
-    public  function actionCreate1()
+    public function actionCreate()
     {
-
+        if(Yii::$app->request->post('id')){
+            parent::actionUpdate();
+            return $this->redirect('/api/index');
+        }
+        else{
+            parent::actionCreate();
+            return $this->redirect('/api/form');
+        }
     }
 }

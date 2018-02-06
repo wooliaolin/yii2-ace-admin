@@ -11,159 +11,178 @@ $this->registerJsFile($url.'/js/chosen.jquery.min.js', $depends);
 <?php $this->beginBlock('javascript') ?>
 <script type="text/javascript">
     var methods  = <?=\yii\helpers\Json::encode($methods)?>,
-        schemelist  = <?=\yii\helpers\Json::encode($schemelist)?>,
-        aAdmins = <?=\yii\helpers\Json::encode($this->params['admins'])?>,
-        m = meTables({
-            title: "Api信息",
-            fileSelector: ["#file"],
-            table: {
-                "aoColumns":[
-                    {
-                        "title": "ID",
-                        "data": "id",
-                        "sName": "id",
-                        "edit": {"type": "hidden"},
-                        "search": {"type": "text"},
-                        "defaultOrder": "desc"
-                    },
-                    {
-                        "title": "接口名称",
-                        "data": "summary",
-                        "sName": "summary",
-                        "edit": {"type": "text", "required": true, "rangelength": "[2, 255]"},
-                        "search": {"type": "text"},
-                        "bSortable": false
-                    },
-                    {
-                        "title": "传输协议",
-                        "data": "schemes",
-                        "sName": "schemes",
-                        "value": schemelist,
-                        "edit": {"type": "select", "required": true},
-                        "bSortable": false,
-                        "createdCell": function(td, data) {
-                            $(td).html(schemelist[data] ? schemelist[data] : data);
-                        }
-                    },
-                    {
-                        "title": "请求方式",
-                        "data": "method",
-                        "sName": "method",
-                        "value": methods,
-                        "edit": {"type": "select", "required": true},
-                        "bSortable": false,
-                        "createdCell": function(td, data) {
-                            $(td).html(methods[data] ? methods[data] : data);
-                        }
-                    },
-                    {
-                        "title": "接口版本",
-                        "data": "version",
-                        "sName": "version",
-                        "isHide": true,
-                        "edit": {"type": "text", "rangelength": "[2, 20]"},
-                        "bSortable": false,
-                        "defaultContent": "",
-                        "bViews": false
-                    },
-                    {
-                        "title": "请求地址",
-                        "data": "url",
-                        "sName": "url",
-                        "isHide": true,
-                        "edit": {"type": "text", "rangelength": "[2, 120]"},
-                        "bSortable": false,
-                        "defaultContent": "",
-                        "bViews": false
-                    },             
-                    {
-                        "title": "所属模块",
-                        "data": "tags",
-                        "sName": "tags",
-                        "isHide": true,
-                        "edit": {"type": "text", "rangelength": "[2, 255]"},
-                        "bSortable": false,
-                        "defaultContent": "",
-                        "bViews": false
-                    },                        
-                    {
-                        "title": "描述信息",
-                        "data": "description",
-                        "sName": "description",
-                        "isHide": true,
-                        "edit": {"type": "text", "rangelength": "[2, 255]"},
-                        "bSortable": false,
-                        "defaultContent": "",
-                        "bViews": false
-                    },
-                    {
-                        "title": "请求格式",
-                        "data": "consumes",
-                        "sName": "consumes",
-                        "isHide": true,
-                        "edit": {"type": "text", "rangelength": "[2, 255]"},
-                        "bSortable": false,
-                        "defaultContent": "",
-                        "bViews": false
-                    },
-                    {
-                        "title": "响应格式",
-                        "data": "produces",
-                        "sName": "produces",
-                        "isHide": true,
-                        "edit": {"type": "text", "rangelength": "[2, 255]"},
-                        "bSortable": false,
-                        "defaultContent": "",
-                        "bViews": false
-                    },
-                    {
-                        "title": "请求参数",
-                        "data": "parameters",
-                        "sName": "parameters",
-                        "isHide": true,
-                        "edit": {"type": "textarea"},
-                        "bSortable": false,
-                        "defaultContent": "",
-                        "bViews": false
-                    },
-                    {
-                        "title": "请求响应",
-                        "data": "responses",
-                        "sName": "responses",
-                        "isHide": true,
-                        "edit": {"type": "text", "rangelength": "[2, 255]"},
-                        "bSortable": false,
-                        "defaultContent": "",
-                        "bViews": false
-                    },
-                    {
-                        "title": "创建时间",
-                        "data": "created_at",
-                        "sName": "created_at",
-                        "createdCell": meTables.dateTimeString
-                    },
-                    {
-                        "title": "创建用户",
-                        "data": "created_id",
-                        "sName": "created_id",
-                        "bSortable": false,
-                        "createdCell": mt.adminString
-                    },
-                    {"title": "修改时间", "data": "updated_at", "sName": "updated_at", "createdCell": mt.dateTimeString},
-                    {
-                        "title": "修改用户",
-                        "data": "updated_id",
-                        "sName": "updated_id",
-                        "bSortable": false,
-                        "createdCell": mt.adminString
-                    }
-                ]
+    schemelist  = <?=\yii\helpers\Json::encode($schemelist)?>,
+    aAdmins = <?=\yii\helpers\Json::encode($this->params['admins'])?>,
+    m = meTables({
+        buttons:{
+            export: {
+                bShow: false,
+            },
+            create: {
+                bShow: false,
+            },
+            updateAll:{
+                bShow:false,
             }
-        });
-    var $file = null;
-    mt.fn.extend({
-        beforeShow: function(data) {
-            $file.ace_file_input("reset_input");
+        },
+        operations:{
+            isOpen: true,
+            buttons: {
+                "see": {"className": "btn-success", "cClass":"me-table-detail",  "icon":"fa-search-plus",  "sClass":"blue"},
+                "update": {"className": "btn-info", "cClass":"me-table-update-new", "icon":"fa-pencil-square-o",  "sClass":"green"},
+                "delete": {"className": "btn-danger", "cClass":"me-table-delete", "icon":"fa-trash-o",  "sClass":"red"}
+            }
+        },
+        title: "Api信息",
+        fileSelector: ["#file"],
+        table: {
+            "aoColumns":[
+            {
+                "title": "ID",
+                "data": "id",
+                "sName": "id",
+                "edit": {"type": "hidden"},
+                "search": {"type": "text"},
+                "defaultOrder": "desc"
+            },
+            {
+                "title": "接口名称",
+                "data": "summary",
+                "sName": "summary",
+                "edit": {"type": "text", "required": true, "rangelength": "[2, 255]"},
+                "search": {"type": "text"},
+                "bSortable": false
+            },
+            {
+                "title": "传输协议",
+                "data": "schemes",
+                "sName": "schemes",
+                "value": schemelist,
+                "edit": {"type": "select", "required": true},
+                "bSortable": false,
+                "createdCell": function(td, data) {
+                    $(td).html(schemelist[data] ? schemelist[data] : data);
+                }
+            },
+            {
+                "title": "请求方式",
+                "data": "method",
+                "sName": "method",
+                "value": methods,
+                "edit": {"type": "select", "required": true},
+                "bSortable": false,
+                "createdCell": function(td, data) {
+                    $(td).html(methods[data] ? methods[data] : data);
+                }
+            },
+            {
+                "title": "接口版本",
+                "data": "version",
+                "sName": "version",
+                "isHide": true,
+                "edit": {"type": "text", "rangelength": "[2, 20]"},
+                "bSortable": false,
+                "defaultContent": "",
+                "bViews": false
+            },
+            {
+                "title": "请求地址",
+                "data": "url",
+                "sName": "url",
+                "isHide": true,
+                "edit": {"type": "text", "rangelength": "[2, 120]"},
+                "bSortable": false,
+                "defaultContent": "",
+                "bViews": false
+            },             
+            {
+                "title": "所属模块",
+                "data": "tags",
+                "sName": "tags",
+                "isHide": true,
+                "edit": {"type": "text", "rangelength": "[2, 255]"},
+                "bSortable": false,
+                "defaultContent": "",
+                "bViews": false
+            },                        
+            {
+                "title": "描述信息",
+                "data": "description",
+                "sName": "description",
+                "isHide": true,
+                "edit": {"type": "text", "rangelength": "[2, 255]"},
+                "bSortable": false,
+                "defaultContent": "",
+                "bViews": false
+            },
+            {
+                "title": "请求格式",
+                "data": "consumes",
+                "sName": "consumes",
+                "isHide": true,
+                "edit": {"type": "text", "rangelength": "[2, 255]"},
+                "bSortable": false,
+                "defaultContent": "",
+                "bViews": false
+            },
+            {
+                "title": "响应格式",
+                "data": "produces",
+                "sName": "produces",
+                "isHide": true,
+                "edit": {"type": "text", "rangelength": "[2, 255]"},
+                "bSortable": false,
+                "defaultContent": "",
+                "bViews": false
+            },
+            {
+                "title": "请求参数",
+                "data": "parameters",
+                "sName": "parameters",
+                "isHide": true,
+                "edit": {"type": "textarea"},
+                "bSortable": false,
+                "defaultContent": "",
+                "bViews": false
+            },
+            {
+                "title": "请求响应",
+                "data": "responses",
+                "sName": "responses",
+                "isHide": true,
+                "edit": {"type": "text", "rangelength": "[2, 255]"},
+                "bSortable": false,
+                "defaultContent": "",
+                "bViews": false
+            },
+            {
+                "title": "创建时间",
+                "data": "created_at",
+                "sName": "created_at",
+                "createdCell": meTables.dateTimeString
+            },
+            {
+                "title": "创建用户",
+                "data": "created_id",
+                "sName": "created_id",
+                "bSortable": false,
+                "createdCell": mt.adminString
+            },
+            {"title": "修改时间", "data": "updated_at", "sName": "updated_at", "createdCell": mt.dateTimeString},
+            {
+                "title": "修改用户",
+                "data": "updated_id",
+                "sName": "updated_id",
+                "bSortable": false,
+                "createdCell": mt.adminString
+            }
+            ]
+        }
+    });
+var $file = null;
+mt.fn.extend({
+    beforeShow: function(data) {
+        $file.ace_file_input("reset_input");
 
             // 修改复值
             if (this.action == "update" && ! empty(data.face)) {
@@ -174,9 +193,18 @@ $this->registerJsFile($url.'/js/chosen.jquery.min.js', $depends);
         }
     });
 
-    $(function(){
-        m.init();
-        $file = $("#file");
-    });
+$(function(){
+    m.init();
+    $file = $("#file");
+
+});
+
+//自定义编辑按钮
+$(document).on('click', '.me-table-update-new', function(evt){
+    var id = $(this).closest('.odd').find('.sorting_1').html();
+    window.location.href = "/api/form?id="+id;
+});
+
+
 </script>
 <?php $this->endBlock(); ?>

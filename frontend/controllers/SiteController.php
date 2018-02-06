@@ -12,6 +12,7 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+use yii\httpclient\Client;
 
 /**
  * Site controller
@@ -67,7 +68,20 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-//        return $this->render('index');
+        # file_get_contents 调用API；
+        // $goods = file_get_contents("http://api.yiiadmin.lin/v1/good?token=ZkG-9a6w91IMdwstGregDJfCBXTU9JIk_1517826562");
+        
+        # use httpclient 调用API
+        $client = new Client(['baseUrl' => 'http://api.yiiadmin.lin/v1']);
+        // $newUserResponse = $client->post('users', ['name' => 'John Doe', 'email' => 'johndoe@example.com'])->send();
+        // $client->post('subscriptions', ['user_id' => $newUserResponse->data['id'], 'article_id' => $articleResponse->data['id']])->send();
+        $goodResponse = $client->get('good', ['token' => 'ZkG-9a6w91IMdwstGregDJfCBXTU9JIk_15178265622'])->send();
+        $goods = $goodResponse->content;
+        $res = json_decode($goods,true);
+        if($goodResponse->headers['http-code']!=200){
+            $res = [];
+        }
+        return $this->render('index',['data'=>$res,'msg'=>$goods]);
     }
 
     /**

@@ -206,6 +206,15 @@ console
     migrations/          contains database migrations
     models/              contains console-specific model classes
     runtime/             contains files generated during runtime
+api
+    assets/              contains application assets such as JavaScript and CSS
+    config/              contains api configurations
+    controllers/         contains Web controller classes
+    models/              contains api-specific model classes
+    modules/             contains api-version modules 
+    runtime/             contains files generated during runtime
+    views/               contains view files for the Web application
+    web/                 contains the entry script and Web resources
 backend
     assets/              contains application assets such as JavaScript and CSS
     config/              contains backend configurations
@@ -213,7 +222,7 @@ backend
     models/              contains backend-specific model classes
     runtime/             contains files generated during runtime
     views/               contains view files for the Web application
-    web/                 contains the entry script and Web resources
+    web/ 
 frontend
     assets/              contains application assets such as JavaScript and CSS
     config/              contains frontend configurations
@@ -228,3 +237,46 @@ environments/            contains environment-based overrides
 tests                    contains various tests for the advanced application
     codeception/         contains tests developed with Codeception PHP Testing Framework
 ```
+# 设置repositories
+【友情提示】安装yii2时用下面的地址方便安装，如果composer安装其他包时更换成中国composer可能会更快。
+```
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ]
+```
+
+# 测试环境直接导入yii2advaced.sql即可！
+
+## 后台配置
+
+1. 添加后台域名例：admin.backend.com 指向backend下的web目录即可；
+2. 修改common->config->main-local.php 配置数据库；
+```
+return [
+    'components' => [
+        'db' => [
+            'class' => 'yii\db\Connection',
+            'dsn' => 'mysql:host=localhost;dbname=yii2advanced',    #配置为你自己的 dbname
+            'username' => 'homestead',                              #配置为你自己的 username
+            'password' => 'secret',                                 #配置为你自己的 password
+            'charset' => 'utf8',
+        ],
+        'mailer' => [
+            'class' => 'yii\swiftmailer\Mailer',
+            'viewPath' => '@common/mail',
+            // send all mails to a file by default. You have to set
+            // 'useFileTransport' to false and configure a transport
+            // for the mailer to send real emails.
+            'useFileTransport' => true,
+        ],
+    ],
+];
+```
+
+## 前台配置/API应用配置
+1. 添加对应的域名，同上；
+2. API文档在api应用对应的modules下；支持多版本的API文档，每一个版本都有对应的api文档。默认是DocController.php;
+   API文档路由默认为:/v1/doc 【v1代表版本号】

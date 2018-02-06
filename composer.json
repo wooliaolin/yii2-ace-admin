@@ -25,7 +25,10 @@
         "yiisoft/yii2-bootstrap": "*",
         "yiisoft/yii2-swiftmailer": "*",
         "yurkinx/yii2-image": "^1.1",
-        "phpoffice/phpexcel": "*"
+        "phpoffice/phpexcel": "*",
+        "sizeg/yii2-jwt": "^1.0",
+        "yiisoft/yii2-httpclient": "*",
+        "league/oauth2-server": "^6.1"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
@@ -46,11 +49,5 @@
     },
     "scripts": {
         "post-install-cmd": "php init --env=Development --overwrite=n"
-    },
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https://asset-packagist.org"
-        }
-    ]
+    }
 }

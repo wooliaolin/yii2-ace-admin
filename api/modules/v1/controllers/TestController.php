@@ -2,13 +2,15 @@
 
 namespace api\modules\v1\controllers;
 
+use Yii;
 use yii\rest\ActiveController;
 use yii\filters\Cors;
 use yii\helpers\ArrayHelper;
 use yii\web\Response;
 use yii\filters\ContentNegotiator;
+use yii\filters\auth\QueryParamAuth;
 
-class GoodsController extends ActiveController
+class TestController extends ActiveController
 {
     public $modelClass = 'api\models\Goods';
 
@@ -24,6 +26,12 @@ class GoodsController extends ActiveController
 
         $behaviors = parent::behaviors();
         $behaviors['contentNegotiator']['formats']['text/html'] = Response::FORMAT_JSON;
+       /* $behaviors['authenticator'] = [
+            'class' => QueryParamAuth::className(),
+            'tokenParam' => 'token',
+            'optional' => [
+            ],
+        ];*/
         return ArrayHelper::merge([
             [
                 'class' => Cors::className(),
@@ -31,8 +39,14 @@ class GoodsController extends ActiveController
                     'Origin' => ['http://doc.yiiadmin.lin'],
                     'Access-Control-Request-Method' => ['GET', 'HEAD', 'OPTIONS'],
                 ],
+
             ],
         ], $behaviors);
+    }
+
+    public  function  actionHelloword()
+    {
+        return Yii::$app->request->get();
     }
 
 }
